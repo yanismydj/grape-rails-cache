@@ -7,7 +7,7 @@ module Grape
       extend ActiveSupport::Concern
 
       included do
-        formatter :json, Grape::Rails::Cache::JsonFormatter
+        formatter :json, Grape::Formatter::ActiveModelSerializers
 
         helpers do
           def compare_etag(etag)
@@ -59,7 +59,7 @@ module Grape
               block.call.to_json
             else
               ::Rails.cache.fetch(cache_key, raw: true, expires_in: cache_store_expire_time) do
-                block.call.to_json
+                block.call
               end
             end
           end
